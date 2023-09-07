@@ -1,0 +1,34 @@
+1. DHCP: Dynamic Host Configuration Protocol (Application layer): Automatically assign IPs in client server architecture
+2. DNS: Domain Name system (Application layer): Naming system for service providers in a network. Maps domain names to IPs.
+3. NAT device: NAT Network Address Translation (Internet layer): modifies IP headers by changing network addresses from one address space to another. So in a private network, every host will not have to change IP address when moved as public IPs remain unchanged (fixed for a router configured with NAT).
+4. IP SEC: protocol for security in internte layer (data security includes auth, integrity, encryption, etc).
+5. Proxy server: protects clients. Server communicates with proxy clients. Reverse proxy: protects servers. clients commmunicate with revrese proxy server.
+6. Firewall: monitors traffic and blocks/allows traffic. A router can be configured to act as a firewall. Firewall ensures that packets only from a valid session pass. 
+7. TLS: Application (HTTP) layer security: security in transit of data in the layer.
+8. Load balancer: Tracks state of a session and directs traffic to one server out of a pool of servers.
+9. (Ratt lo) iSCSI HBA: An iSCSI host bus adapter (more commonly, HBA) implements a hardware initiator. A typical HBA is packaged as a combination of a Gigabit (or 10 Gigabit) Ethernet network interface controller, some kind of TCP/IP offload engine (TOE) technology and a SCSI bus adapter, which is how it appears to the operating system.
+
+"Typically, these are handled by filtering out the conflicted subnets from the routing tables and creating suitable entries in the Network Address Translation(NAT) appliance to hide the conflicted subnets.": basically create entries so that there is a distinction between the conflicting ones (possibly create a filter which directs to different sectors during routing).
+
+9. Subnet mask:
+10. BGP: 
+11. ASN:
+
+
+LIST OF PROBLEMS:
+
+1. Detection of public IPs
+2. WIS throwing out S_0
+3. Merge is not detecting all overlaps in the graph at each step. Just considering one overlap per merge and then weight of wis is simply computed as weight of overlap.
+4. WIS frozen graph cant be modified
+5. Max no. is 175 not 350
+
+
+
+64602
+64128
+65510
+64202
+22222
+65221
+65010
