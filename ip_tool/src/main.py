@@ -90,9 +90,9 @@ if __name__ == "__main__":
     all_routes_after_reassigning, new_allocated_subnets, x = reallocation.add_removed_subnets(all_routes_after_removing_conflicts, subnets_to_be_reassigned)
     merge.gen_random_values_for_addr_types(new_allocated_subnets)
 
-    ov = overlaps.find_coalition_overlaps(all_routes_after_reassigning)
-    if len(ov) > 0:
-        print("Length of overlaps can't be non-zero after reassigning")
+    # ov = overlaps.find_coalition_overlaps(all_routes_after_reassigning)
+    # if len(ov) > 0:
+    #     print("Length of overlaps can't be non-zero after reassigning")
 
 
     # ------------- running merge-split process --------------
@@ -103,14 +103,19 @@ if __name__ == "__main__":
     print("Routing table size after finding overlaps", routingTableParser.routing_table_size(d))
 
     if len(f_edges) > 0:
-        print("Conflicting edges found in the graph after consolidation")
-        for edge in f_edges:
-            print(edge)
+        print("Conflicting edges found in the graph after consolidation: ", len(f_edges))
 
-    if not d["64128"]:
-        print("64128 not found")
-    else:
-        print(d["64128"])
+        # for edge in f_edges:
+        #     print(edge)
+
+    # if not d["13979"]:
+    #     print("13979 not found")
+    # else:
+    #     print(d["13979"])
+    # if not d["65432"]:
+    #     print("65432 not found")
+    # else:
+    #     print(d["65432"])
 
     print ('creating overlap graph....')
     G = overlaps.create_conflict_graph(f_edges)
@@ -126,31 +131,22 @@ if __name__ == "__main__":
     to_be_kept, needs_to_be_changed = wis_lp(unfrozen_graph)
     print("Routing table size after running wis_lp", routingTableParser.routing_table_size(d))
 
-    if len(needs_to_be_changed) > 0:
-        print("IP subnets to be changed after merge-split process")
-        for subnet in needs_to_be_changed:
-            print(subnet)
+    count = 0
+    for subnet in needs_to_be_changed:
+        for edge in f_edges:
+            if subnet == edge[0] or subnet == edge[1]:
+                count+=1
+    print("count: ", count, " f_edges: ", len(f_edges))
+    if count < len(f_edges):
+        print("Failed to resolve all conflicts")
+    else:
+        print("Correctly found all conflicts")
 
     for values in d.values():
         for value in values:
             value = str(value)
-    removed = set()
-    for i in needs_to_be_changed:
-        temp = i.split('_')
-        asn = temp[0]
-        subnet = temp[1]
-        if subnet in d[asn] and subnet not in removed:
-            d[asn].remove(subnet)
-            removed.add(subnet)
-            print(f"removed {i}")
-            # print 'Successfully removed {} from {}'.format(subnet, asn)
-        else:
-            print ('Attempting to remove {} from {} and not found'.format(subnet, asn))
-
-        if not d[asn]:
-            # print 'asn {} has no subnets, {}'.format(asn, d[asn])
-            del d[asn]
-    # return d
+# TODO: check if there may exist duplicate copies of the subnets in the dictionary
+    d = overlaps.remove_subnets_to_be_changed(d, needs_to_be_changed)
     print("Routing table size after removing conflicts", routingTableParser.routing_table_size(d))
     
     # all_routes_after_removing_conflicts = overlaps.remove_subnets_to_be_changed(d, needs_to_be_changed)
@@ -160,6 +156,8 @@ if __name__ == "__main__":
     ov = overlaps.find_coalition_overlaps(all_routes_after_reassigning)
     if len(ov) > 0:
         print("Length of overlaps can't be non-zero after reassigning")
+        for o in ov:
+            print(o)
     else :
         print("Resolved all overlaps")
 

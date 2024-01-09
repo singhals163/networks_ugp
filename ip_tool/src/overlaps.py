@@ -194,12 +194,14 @@ def remove_subnets_to_be_changed(d, subnets):
         temp = i.split('_')
         asn = temp[0]
         subnet = temp[1]
-        if subnet in d[asn] and subnet not in removed:
+        # if subnet in d[asn] and subnet not in removed:
+        if subnet in d[asn]:
             d[asn].remove(subnet)
             removed.add(subnet)
             # print 'Successfully removed {} from {}'.format(subnet, asn)
         else:
             print ('Attempting to remove {} from {} and not found'.format(subnet, asn))
+            print(d[asn])
 
         if not d[asn]:
             # print 'asn {} has no subnets, {}'.format(asn, d[asn])
